@@ -1,14 +1,9 @@
-/** @file
-* This file stores the tetrahedron data. Child class of the cell
-*/
-/** Brief description
-* Allows the volume, weight and centre to be calculated
-*/
-#include "tetrahedron.h"
+
+#include "triangle.h"
 
 //calculate the volume of this cell
 //execute one time of vector calculation
-double Tetrahedron :: getvolume() {
+double Triangle :: getvolume() {
 	std::vector<Vector> v = getV();
 	double volume = 0;
 	Vector A = v[0] - v[1];
@@ -19,16 +14,10 @@ double Tetrahedron :: getvolume() {
 	return volume;
 }
 
-double Tetrahedron::getWeight() {
-	double weight;
-	Material m = getM();
-	weight = this->volume * m.getDensity();
-	return weight;
-}
 
 //get the centre of the cell
 //divide the sum of all vertices coordinate by 4
-Vector Tetrahedron::getCentre() {
+Vector Triangle::getCentre() {
 	std::vector<Vector> v = getV();
 	Vector centre;
 	Vector total = v[0] + v[1] + v[2] + v[3];

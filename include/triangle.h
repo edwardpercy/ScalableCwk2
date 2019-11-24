@@ -2,9 +2,8 @@
 
 #include "cell.h"
 
-class Tetrahedron : public cell {
+class Triangle : public cell {
 public:
 	double getvolume();
-	double getWeight();
 	Vector getCentre();
 };

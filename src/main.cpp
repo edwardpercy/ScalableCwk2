@@ -9,6 +9,7 @@
 
 int main( int argc, char** argv )
 {
+    string FileName = "triangulation#1.tri";
 	M = Model();
     M.LoadModel(FileName);
 }
