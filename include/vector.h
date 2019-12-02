@@ -30,6 +30,7 @@ public:
 
 	//add, subtract,divide, scalar and vector product with no operator overloading
     void add( Vector v );
+    bool equal( Vector v );
     void subtract( Vector v);
     float scalarproduct (Vector v);
     Vector vectorproduct (Vector v);

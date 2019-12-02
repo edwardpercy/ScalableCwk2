@@ -10,25 +10,27 @@
 
 using namespace std;
 
-class Model
+class Mesh
 {
 private:
 	vector<Vector> Vertices;
-	vector<Triangle> Triangles;
+	vector<Triangle> Cells;
 	float x, y, z;
     vector<float> V;
 
 
 public:
-	Model();
-	~Model();
-	void LoadModel(string FileName);
+	Mesh();
+	~Mesh();
+	void LoadMesh(string FileName);
+	void SaveMesh(string FileName);
 	double TriangleArea(int id);
 	int NumberCells(void);
 	int NumberVertices(void);
 	int isPointContained(double px,double py);
-	int CircumcirclesCheck(double px,double py);
+	int CircumcirclesCheck(Vector p);
+	void GenerateDelaunayTriangle(Vector point);
 	void CalcCircumcircle(int id);
-	void DelaunayCheck();
+	bool DelaunayCheck();
 };
 

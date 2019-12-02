@@ -44,6 +44,11 @@ void Vector::add( Vector v ) {
     this->y += v.y;
     this->z += v.z;
 }
+bool Vector::equal( Vector v ) {
+	if (this->x == v.x && this->y ==v.y && this->z == v.z) return true;
+	else return false;
+#
+}
 
 void Vector::midpoint( Vector a, Vector b) {
 

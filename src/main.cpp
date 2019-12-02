@@ -9,9 +9,10 @@
 
 int main( int argc, char** argv )
 {
-    string FileName = "triangulation#1.tri";
-	M = Model();
-    M.LoadModel(FileName);
+   
+	M = Mesh();
+    M.LoadMesh("triangulation#4.tri");
+   
 
     //AREA
     cout << "Area of triangle ID:10 " <<  M.TriangleArea(10) << "\n" << endl;
@@ -23,6 +24,9 @@ int main( int argc, char** argv )
 
     M.CalcCircumcircle(0); //Calculates the triangles circumcircle
 
-    M.CircumcirclesCheck(70,-2); //Checks all triangles to see which circumcircl(s) the point lies within
+    if(M.DelaunayCheck()==true) cout << "Mesh is Delaunay" << endl;
+    else cout << "Mesh is Delaunay" << endl;
+    M.SaveMesh("test.tri");
+    
 }
 // /main.cpp------------------------------------------------------------------

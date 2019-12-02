@@ -1,6 +1,6 @@
-#include "model.h"//ModelLoader
+#include "mesh.h"//ModelLoader
 
 using namespace std;
-Model M;
+Mesh M;
 int main(int argc, char** argv );
 
