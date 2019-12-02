@@ -8,95 +8,122 @@ Model::Model() { //Model class constructor
 Model::~Model() {
 	//Clears all the vector lists from memory
 	Vertices.clear();
-	Cells.clear();
 	Triangles.clear();
 }
 
 void Model::LoadModel(string FileName) { //Loads the model
-	string line, data;
-	int LinesToInterate, NumCols, NumProperties= 0;
 	bool LineInit = true;
-	int LinePointer = 0; //Initialise variables
-	int InputType = 0; //Initialise variables
-	ifstream file;
+	int id ,V1 ,V2 ,V3 ,LinesToInterate, NumCols, NumProperties = 0;
+	float X,Y,Z;
+	string parameters;
 
-	
-	file.open(FileName); //Loads the model file 
-	if (file.is_open()) { //Checks the file is open 
-		while (getline(file, data)) { //Read each line and send data to classes
+	ifstream file(FileName, ios::in);
 
-			if (data.empty() || line == "#") continue; //Checks if the data is empty or a comment (Ignore)
-
-			if (LineInit == true){
-				if (isdigit(data[0])==false) continue;
-				//~~Reads thespecific data from the string using index~~
-				istringstream iss(data);
-				vector<std::string> results((std::istream_iterator<std::string>(iss)),istream_iterator<std::string>());
-
-				LinesToInterate = stoi(results[0]);
-				NumCols= stoi(results[1]);
-				NumProperties = stoi(results[2]);
-				InputType += 1; //Move to the next type of data (Vertices -> cells(Triangles))
-				LineInit = false;
-				std::cout << LinesToInterate << "  " << NumCols << "  " << NumProperties << std::endl;
-				LinePointer = 0;
-			}
-			else if (LinePointer == LinesToInterate) {
-				LineInit = true;
-			}
-
-			else{
-				if (InputType == 0) SetVertices(data);
-				else if (InputType == 1) SetCell(data,NumCols);
-			}
-
-			LinePointer++; //Increment current line
-		}
-		file.close(); // Close the file when finished
-	}
-	else {
-		throw "Error opening file, use a compatible model file";
+	if (!file){
+		cerr<<"File could not be opend"<<endl;
 		exit(EXIT_FAILURE);
-
 	}
-		
 
-}
-void Model::SetCell(string data, int NumCols) {
-	istringstream iss(data); //string stream to read characters in string
-	vector<std::string> results((std::istream_iterator<std::string>(iss)), //Splits into characters
-		istream_iterator<std::string>());
-
-	int ID = stoi(results[0]); //Gather the ID from second value in results string
-
-
+	while(file>>LinesToInterate>>NumCols>>NumProperties) { 
+		if (NumProperties==0){
+			for (int i(0);i<LinesToInterate;i++){
+				(file>>id>>X>>Y>>Z);
+				Vector *V = new Vector; //Creates a new vector object
+				V->SetVector(id,X,Y,Z); //Sends the data to the class function
+				Vertices.push_back(*V); //Adds it to the vector list 
+			}
+		}
+		else{
+			for (int i(0);i<LinesToInterate;i++){
+				(file>>id>>V1>>V2>>V3) && getline(file, parameters);	
+				Triangle *T = new Triangle;
+				
+				T->setCell(id, parameters);
+				T->setVertices(V1);
+				T->setVertices(V2);
+				T->setVertices(V3);
+				
+				Triangles.push_back(*T);
+			}
+		}
+	}
+	cout << "Number of triangles loaded: " << Triangles.size() << endl;
+	cout << "Number of vertices loaded: " << Vertices.size() <<"\n" << endl;
 	
-	if (NumCols == 3) {
-		Triangle *T = new Triangle;
-		T->setCell(ID, "Triangle");
-		
-		for (int i = 0; i < 3; i++) {		
-			T->setVertices(stoi(results[i + 1]));
-		}	
-		Triangles.push_back(*T);
+	
+}
+
+int Model::CircumcirclesCheck(double px,double py){
+	int NumCircumcirclesContained = 0;
+	bool inCircumcircle = false;
+	int TriangleID = isPointContained(px,py);
+	if (TriangleID == -1){
+		cout << "Point: " << px << "," << py << " not within any triangle\n" << endl;
+	}
+	else{
+		cout << "Point: " << px << "," << py << " within triangle: " << TriangleID << "\n" << endl;
+		//START triangle ID used to search adjacent triangles HERE
+		for (int i(0);i<Triangles.size();i++){ //Loops through all triangles 
+											   //IF algorithm to find adjacent triangles was implemented we would
+											   //Loop through only those here instead of all 
+
+			CalcCircumcircle(i); //Calculates the triangles circumcircle
+			inCircumcircle = Triangles[i].isPointInCircumcircle(px,py); //Checks if the point is within circumcircle 
+			if (inCircumcircle == true){
+				cout << "Point: " << px << "," << py << " within the circumcircle of triangle with ID: " << i << endl;
+				NumCircumcirclesContained += 1;
+			}
+		}
+
+
+	}
+	return NumCircumcirclesContained;
+}
+
+void Model::DelaunayCheck(){
+	for (int i(0); i <= Vertices.size(); i++){
+		if (CircumcirclesCheck(Vertices[i].getx(),Vertices[i].gety()) > 1){
+			cout << "Point in multiple Circumcircles, NON Delaunay" << endl;
+		} 
+		else{
+			cout << "Delaunay Mesh" << endl;
+		}
+		//if in circumcircle is the point a member of the triangle 
 	}
 
-	//Depending on the number of columns different shapes can be defined, eg - 4 could be square
-
 }
-void Model::SetVertices(string data) { //creates new vector objects then sends the data to the new vector class created above 
-	istringstream iss(data);
-	vector<std::string> results((std::istream_iterator<std::string>(iss)),istream_iterator<std::string>());
 
-	float ID = stoi(results[0]);
-	float X = stof(results[1]);
-	float Y = stof(results[2]);
-	float Z = stof(results[3]);	
+void Model::CalcCircumcircle(int id){
 
-	Vector *V = new Vector; //Creates a new vector object
-	V->SetVector(ID,X,Y,Z); //Sends the data to the class function
-	Vertices.push_back(*V); //Adds it to the vector list 
+	vector<int> p = Triangles[id].getVertices();
+	Triangles[id].Circumcircle(Vertices[p[0]],Vertices[p[1]],Vertices[p[2]]);
 }
+
+int Model::isPointContained(double px,double py){
+	bool result;
+	for (int i(0);i<Triangles.size();i++){
+		vector<int> p = Triangles[i].getVertices();
+		result = Triangles[i].isPointInside(Vertices[p[0]],Vertices[p[1]],Vertices[p[2]], px,py);
+		if (result == true) return i;	
+	}
+	return -1;
+}
+
+double Model::TriangleArea(int id){
+
+	//Gather area from loaded parameters 
+	double RootArea = Triangles[id].getarea();
+	if (RootArea != -1){
+		return RootArea;
+	}
+	//Backup incase area parameter has not been imported successfully
+	else{
+		vector<int> p = Triangles[id].getVertices();
+		p.clear();
+		return(0.5 *(-Vertices[p[1]].gety()*Vertices[p[2]].getx() + Vertices[p[0]].gety()*(-Vertices[p[1]].getx() + Vertices[p[2]].getx()) + Vertices[p[0]].getx()*(Vertices[p[1]].gety() - Vertices[p[2]].gety()) + Vertices[p[1]].getx()*Vertices[p[2]].gety()));
+	}
+}
+
 int Model::NumberVertices(void) {
 	return Vertices.size();
 

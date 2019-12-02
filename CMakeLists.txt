@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR) #Check for version 3.3 or above for cmake otherwise return an error
 project( Model_Loader ) # Name of the project
-include(CPack) #Used for creating installers and packages
+
 
 foreach(p
     CMP0071 # 3.10: Let AUTOMOC and AUTOUIC process GENERATED files

@@ -14,7 +14,6 @@ class Model
 {
 private:
 	vector<Vector> Vertices;
-	vector<cell> Cells;
 	vector<Triangle> Triangles;
 	float x, y, z;
     vector<float> V;
@@ -24,9 +23,12 @@ public:
 	Model();
 	~Model();
 	void LoadModel(string FileName);
-	void SetCell(string data, int NumCols);
-	void SetVertices(string data); 
+	double TriangleArea(int id);
 	int NumberCells(void);
 	int NumberVertices(void);
+	int isPointContained(double px,double py);
+	int CircumcirclesCheck(double px,double py);
+	void CalcCircumcircle(int id);
+	void DelaunayCheck();
 };
 

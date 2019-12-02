@@ -24,8 +24,8 @@ Vector::Vector( float x, float y, float z ) { //constructor
     this->z = z;
 }
 
-void Vector::SetVector(int iD, float x, float y, float z) { //setting vector values using this
-	this->ID = iD;
+void Vector::SetVector(float ID, float x, float y, float z) { //setting vector values using this
+	this->ID = ID;
 	this->x = x;
 	this->y = y;
 	this->z = z;
@@ -44,6 +44,28 @@ void Vector::add( Vector v ) {
     this->y += v.y;
     this->z += v.z;
 }
+
+void Vector::midpoint( Vector a, Vector b) {
+
+    this->x = (a.x + b.x) / 2;
+	this->y = (a.y + b.y) / 2;
+
+}
+
+float Vector::length(Vector B) {
+
+    return sqrt(((this->x - B.x) * (this->x - B.x))+((this->y - B.y) * (this->y - B.y)));
+	
+
+}
+
+float Vector::slope( Vector from, Vector to) {
+
+    return (to.y - from.y) / (to.x - from.x);
+
+}
+
+		
 
 
 Vector Vector::divide(int n) { //divide function

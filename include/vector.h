@@ -25,7 +25,7 @@ public:
 	Vector();
 	Vector( float x, float y, float z ); //initialise
     
-	void SetVector(int iD, float x, float y, float z);
+	void SetVector(float ID,float x, float y, float z);
 	void print();
 
 	//add, subtract,divide, scalar and vector product with no operator overloading
@@ -33,8 +33,10 @@ public:
     void subtract( Vector v);
     float scalarproduct (Vector v);
     Vector vectorproduct (Vector v);
-
+    void midpoint( Vector a, Vector b);
+    float slope( Vector from, Vector to);
 	Vector divide(int n);
+    float length(Vector B);
 
     float getx(); //{ return x; }
     float gety(); //{ return y; }
