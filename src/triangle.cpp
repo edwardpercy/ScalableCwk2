@@ -8,8 +8,11 @@ double Triangle :: getarea() {
 	string RootArea = getParam(10);
 	if (RootArea == "e") return -1;
 	double RArea = stof(RootArea);
-	return RArea*RArea;
+	area = RArea*RArea;
+	return area;
 }
+
+
 
 void Triangle::Circumcircle(Vector &A, Vector &B, Vector &C){
 	Matrix RhsM( A.getx(), B.getx(), C.getx(),  A.gety(), B.gety(), C.gety(), 1,1,1);
@@ -63,7 +66,7 @@ void Triangle::Circumcircle(Vector &A, Vector &B, Vector &C){
 // 	delete &AB,&BC;
 // }
 
-Vector Triangle::getCircumcentre() {
+Vector Triangle::getCircumcentre() const{
 	  return this->circumcentre;
 }
 

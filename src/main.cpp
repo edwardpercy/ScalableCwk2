@@ -7,8 +7,8 @@
 */
 #include "main.h"
 
-double func (double x, double y){
-        return x*3 + y*3;
+double function (double x, double y){
+        return x*2 + y/5;
 }
 
 
@@ -34,7 +34,8 @@ int main( int argc, char** argv )
 
     M.SaveMesh("test.tri");
 
-    cout << M.integrate(func, Mesh::ConstantApprox<double>) << endl;
+    cout << "Constrant Approx: " << M.integrate(function, 0) << endl;
+    cout << "Linear Approx: " << M.integrate(function, 1) << endl;
 
 }
 // /main.cpp------------------------------------------------------------------

@@ -7,10 +7,11 @@ class Triangle : public cell {
 
 private:
 	Vector circumcentre;
-	float radius;	
+	double radius, area;	
+
 public:
 	
-	Vector getCircumcentre();
+	Vector getCircumcentre() const;
 	float getRadius();
 	double getarea();
 	bool isPointInside(Vector &p0, Vector &p1, Vector &p2, double px, double py);
