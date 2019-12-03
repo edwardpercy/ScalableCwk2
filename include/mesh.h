@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,6 +9,8 @@
 #include "cell.h"
 #include "vector.h"
 #include "Triangle.h"
+#include <math.h> 
+#include "matrix.h"
 
 using namespace std;
 
@@ -14,7 +18,8 @@ class Mesh
 {
 private:
 	vector<Vector> Vertices;
-	vector<Triangle> Cells;
+	vector<cell> Cells;
+	vector<Triangle> Triangles;
 	float x, y, z;
     vector<float> V;
 
@@ -32,5 +37,38 @@ public:
 	void GenerateDelaunayTriangle(Vector point);
 	void CalcCircumcircle(int id);
 	bool DelaunayCheck();
+
+
+	template<typename T>
+    double ConstantApprox(T func, Triangle &triangle) {
+		Vector O = triangle.getCircumcentre();
+        return (triangle.getarea() *  func(O.getx(),O.gety()));
+    }
+
+	template<typename T>
+    double LinearApprox(T func, Triangle &triangle) {
+
+		vector<int> p = triangle.getVertices();
+
+		return ((triangle.getarea() / 3) * 
+						func(Vertices[p[0]].getx(),Vertices[p[0]].gety()) *
+						func(Vertices[p[1]].getx(),Vertices[p[1]].gety()) *
+						func(Vertices[p[2]].getx(),Vertices[p[2]].gety()));
+		
+    }
+
+
+	template <typename T, typename F>
+    double integrate(T func, F ApproxType) {
+		double res, temp = 0;
+        for (int i = 0; i < Triangles.size(); i++) {
+			temp = abs(ApproxType(func, Triangles[i]));
+			if(isnan(temp)==false) res += temp;
+		}
+		return res;
+    }
+
+
+	
 };
 

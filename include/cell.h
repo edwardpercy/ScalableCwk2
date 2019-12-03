@@ -3,9 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
 #include "vector.h"
-
+#include "matrix.h"
 #include <cmath>
 #include <sstream>  //for std::istringstream
 #include <iterator> //for std::istream_iterator

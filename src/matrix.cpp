@@ -18,7 +18,7 @@
 using namespace std;
 
 /*-- -------------------------------------------------------*/
-Matrix::Matrix( float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33) { //constructor
+Matrix::Matrix( double m11, double m12, double m13, double m21, double m22, double m23, double m31, double m32, double m33) { //constructor
 	this->m11 = m11;
 	this->m12 = m12;
 	this->m13 = m13;
@@ -30,7 +30,7 @@ Matrix::Matrix( float m11, float m12, float m13, float m21, float m22, float m23
 	this->m33 = m33;
 }
 
-void Matrix::SetMatrix(float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33) {
+void Matrix::SetMatrix( double m11, double m12, double m13, double m21, double m22, double m23, double m31, double m32, double m33) {
 	this->m11 = m11;
 	this->m12 = m12;
 	this->m13 = m13;
@@ -67,6 +67,20 @@ void Matrix::identity(Matrix m) { //diagonals are 1
 	this->m33 = 1;
 }
 
+vector<double> Matrix::getMatrix() { //diagonals are 1
+	vector<double> res;
+	res.push_back(m11);
+	res.push_back(m21);
+	res.push_back(m31);
+	res.push_back(m12);
+	res.push_back(m22);
+	res.push_back(m32);
+	res.push_back(m13);
+	res.push_back(m23);
+	res.push_back(m33);
+
+	return res;
+}
 	/*---------------------------------------------------------*/
 	//rotation 
 	// A function to rotate a N x N matrix by 90 degrees in anti-clockwise direction 
@@ -97,19 +111,6 @@ void Matrix::identity(Matrix m) { //diagonals are 1
 		}
 	}
 
-	// Function to print the matrix 
-	void Matrix::displayMatrix(int mat[N][N])
-	{
-		for (int i = 0; i < N; i++)
-		{
-			for (int j = 0; j < N; j++)
-				printf("%2d ", mat[i][j]);
-
-			printf("\n");
-		}
-		printf("\n");
-	}
-
 
 	/*---------------------------------------------------------*/
 //determinant calculation (done using the maths formula)
@@ -121,14 +122,31 @@ void Matrix::identity(Matrix m) { //diagonals are 1
 
 	/*---------------------------------------------------------*/
 //calculating the inverse - currently outputting incorrect values
-	/*
-	void Matrix::inverse(int mat[N][N]) {
-		for (i = 0; i < N; i++) {
-			for (j = 0; j < N; j++) 
-				m = (((mat[(j + 1) % 3][(i + 1) % 3] * mat[(j + 2) % 3][(j + 2) % 3]) - (mat[(j + 1) % 3][(i + 2) % 3] * mat[(j + 2) % 3][(i + 1) % 3])) / m);
-					printf("%2d ", mat[i][j]);
+	
+	void Matrix::inverse() {
+		// computes the inverse of a matrix m
+		double det = m11 * (m22 * m33 - m32 * m23) -
+					m12 * (m21 * m33 - m23 * m31) +
+					m13 * (m21 * m32 - m22 * m31);
 
-			printf("\n");
-		}
-		printf("\n");
-	} */
+		double invdet = 1 / det;
+
+		SetMatrix((m22 * m33 - m32 * m23) * invdet,
+		(m13 * m32 - m12 * m33) * invdet,
+		(m12 * m23 - m13 * m22) * invdet,
+		(m23 * m31 - m21 * m33) * invdet,
+		(m11 * m33 - m13 * m31) * invdet,
+		(m21 * m13 - m11 * m23) * invdet,
+		(m21 * m32 - m31 * m22) * invdet,
+		(m31 * m12 - m11 * m32) * invdet,
+		(m11 * m22 - m21 * m12) * invdet);
+	} 
+
+	vector<double> Matrix::Multiply1X3(vector<double> &Vec) {
+		vector<double> res;
+		res.push_back((Vec[0] * m11) + (Vec[1] * m21) + (Vec[2] * m31));
+		res.push_back((Vec[0] * m12) + (Vec[1] * m22) + (Vec[2] * m32));
+		res.push_back((Vec[0] * m13) + (Vec[1] * m23) + (Vec[2] * m33));
+
+		return res;
+	}

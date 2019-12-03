@@ -7,11 +7,16 @@
 */
 #include "main.h"
 
+double func (double x, double y){
+        return x*3 + y*3;
+}
+
+
 int main( int argc, char** argv )
 {
    
 	M = Mesh();
-    M.LoadMesh("triangulation#4.tri");
+    M.LoadMesh("triangulation#1.tri");
    
 
     //AREA
@@ -25,8 +30,11 @@ int main( int argc, char** argv )
     M.CalcCircumcircle(0); //Calculates the triangles circumcircle
 
     if(M.DelaunayCheck()==true) cout << "Mesh is Delaunay" << endl;
-    else cout << "Mesh is Delaunay" << endl;
+    else cout << "Mesh is NOT Delaunay" << endl;
+
     M.SaveMesh("test.tri");
-    
+
+    cout << M.integrate(func, Mesh::ConstantApprox<double>) << endl;
+
 }
 // /main.cpp------------------------------------------------------------------

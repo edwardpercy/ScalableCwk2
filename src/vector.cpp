@@ -18,13 +18,13 @@
 using namespace std;
 
 /*-- -------------------------------------------------------*/
-Vector::Vector( float x, float y, float z ) { //constructor
+Vector::Vector( double x, double y, double z ) { //constructor
     this->x = x;
     this->y = y;
     this->z = z;
 }
 
-void Vector::SetVector(float ID, float x, float y, float z) { //setting vector values using this
+void Vector::SetVector(int ID, double x, double y, double z) { //setting vector values using this
 	this->ID = ID;
 	this->x = x;
 	this->y = y;
@@ -57,14 +57,14 @@ void Vector::midpoint( Vector a, Vector b) {
 
 }
 
-float Vector::length(Vector B) {
+double Vector::length(Vector B) {
 
     return sqrt(((this->x - B.x) * (this->x - B.x))+((this->y - B.y) * (this->y - B.y)));
 	
 
 }
 
-float Vector::slope( Vector from, Vector to) {
+double Vector::slope( Vector from, Vector to) {
 
     return (to.y - from.y) / (to.x - from.x);
 
@@ -134,9 +134,9 @@ void Vector::print() {
 
 }
 
-float Vector::getx(){ return x; }
-float Vector::gety(){ return y; }
-float Vector::getz(){ return z; }
+double Vector::getx(){ return x; }
+double Vector::gety(){ return y; }
+double Vector::getz(){ return z; }
 int Vector::getID() { return ID; }
 
 /*---------------------------------------------------------*/

@@ -23,9 +23,9 @@ public:
 	Vector operator-(Vector v);
 
 	Vector();
-	Vector( float x, float y, float z ); //initialise
+	Vector( double x, double y, double z ); //initialise
     
-	void SetVector(float ID,float x, float y, float z);
+	void SetVector(int ID,double x, double y, double z);
 	void print();
 
 	//add, subtract,divide, scalar and vector product with no operator overloading
@@ -35,21 +35,21 @@ public:
     float scalarproduct (Vector v);
     Vector vectorproduct (Vector v);
     void midpoint( Vector a, Vector b);
-    float slope( Vector from, Vector to);
+    double slope( Vector from, Vector to);
 	Vector divide(int n);
-    float length(Vector B);
+    double length(Vector B);
 
-    float getx(); //{ return x; }
-    float gety(); //{ return y; }
-    float getz(); //{ return z; }
+    double getx(); //{ return x; }
+    double gety(); //{ return y; }
+    double getz(); //{ return z; }
 	int getID(); //{ return z; }
 
 
 private:
     int ID;
-    float x;
-    float y;
-    float z;
+    double x;
+    double y;
+    double z;
 
 };
 

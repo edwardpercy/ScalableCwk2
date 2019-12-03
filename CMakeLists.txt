@@ -20,6 +20,7 @@ add_library( vector STATIC src/vector.cpp)
 add_library( cell STATIC src/cell.cpp )
 add_library( mesh STATIC src/mesh.cpp )
 add_library( triangle STATIC src/triangle.cpp )
+add_library( matrix STATIC src/matrix.cpp )
 
 
 #Link all the src files to the executable
@@ -29,6 +30,7 @@ add_executable(Mesh_Loader MACOSX_BUNDLE
   include/mesh.h
   include/vector.h
   include/triangle.h
+  include/matrix.h
   src/main.cpp
   ${UI_Srcs}
 )
@@ -38,6 +40,7 @@ target_link_libraries( Mesh_Loader
 								vector
 								cell
 								triangle
+								matrix
 								)
 
 
