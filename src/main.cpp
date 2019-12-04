@@ -8,7 +8,7 @@
 #include "main.h"
 
 double function (double x, double y){
-        return x*2 + y/5;
+        return x*3 + y*3;
 }
 
 
