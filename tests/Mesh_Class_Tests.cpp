@@ -48,7 +48,6 @@ TEST_CASE( ".node File Saved", "[SaveNodes]" ) {
 TEST_CASE( "PointinTriangleCheck", "[PointCheck]" ) {
     Mesh M = Mesh("../resources/triangulation_files/triangulation#1.tri");
     REQUIRE(M.isPointContained(70,-2) == 2229);
-
 }
 
 TEST_CASE( "CircumcirclesCheck", "[CircumcirclesCheck]" ) {

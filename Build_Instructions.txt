@@ -1,7 +1,9 @@
+Preferred build method:
 mkdir build
 cd build
-
 g++ -O4 ../src/*.cpp ../tests/*.cpp -o Mesh_Loader
 
+
+Optional (Not tested for a while)
 cmake -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" ..
 mingw32-make
