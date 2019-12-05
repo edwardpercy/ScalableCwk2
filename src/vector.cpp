@@ -1,19 +1,6 @@
-﻿/** @file
-* This file stores the vertices data for the model
-*/
-/** Brief description
-* Handles vectors. Has functions such as subtract, add and multiply
-*/
-//
-//  vector.cpp
-//  vector
-//
-//  Created by Hana Makhlouf on 11/9/18.
-//  Copyright © 2018 Hana Makhlouf. All rights reserved.
-//
-
+﻿
 #include <iostream>
-#include "vector.h"
+#include "../include/vector.h"
 #include <vector> 
 using namespace std;
 
@@ -22,6 +9,12 @@ Vector::Vector( double x, double y, double z ) { //constructor
     this->x = x;
     this->y = y;
     this->z = z;
+}
+
+Vector::Vector( double x, double y) { //constructor
+    this->x = x;
+    this->y = y;
+    this->y = 0;
 }
 
 void Vector::SetVector(int ID, double x, double y, double z) { //setting vector values using this
@@ -36,6 +29,14 @@ Vector::Vector() { //default constructor just in case no values are entered
     this->y = 0.;
     this->z = 0.;
 }
+
+Vector::Vector(const Vector &v2) {
+		ID = v2.ID;
+        x = v2.x;
+        y = v2.y;
+        z = v2.z;
+
+	} 
 
 /*---------------------------------------------------------*/
 //add function
@@ -69,9 +70,6 @@ double Vector::slope( Vector from, Vector to) {
     return (to.y - from.y) / (to.x - from.x);
 
 }
-
-		
-
 
 Vector Vector::divide(int n) { //divide function
 	Vector vector1;

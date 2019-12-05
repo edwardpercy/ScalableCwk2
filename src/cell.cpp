@@ -1,17 +1,18 @@
-#include "cell.h"
-/** @file
-* This file stores the data for each cell of the model
-*/
-/** Brief description
-
-*/
-
-
-
+#include "../include/cell.h"
 
 using namespace std;
 
+cell::cell(){
+	id = 0;
+}
 
+cell::cell(const cell &c2) {
+	id = c2.id;
+	type = c2.type;
+	p = c2.p;
+	params = c2.params;
+
+} 
 
 //store cellID, matID and cell type
 void cell :: setCell(int ID, string p){
@@ -27,20 +28,25 @@ void cell :: setCell(int ID, string p){
 	}
 }
 
+void cell :: setCell(int ID){
+    this->id = ID;
+
+}
+
 //store verticesID
-void cell :: setVertices(int v){
+void cell::setVertices(int v){
       this->p.push_back(v);  
 }
 
-vector<int> cell :: getVertices(){
+vector<int> cell::getVertices(){
       return p;
 }
 
-int cell :: getCellID() {
+int cell::getCellID() {
 	  return this->id;
 }
 
-string cell :: getParam(int i) {
+string cell::getParam(int i) {
 	if (params.size() < i) return "e";
 
 	else{
@@ -48,7 +54,7 @@ string cell :: getParam(int i) {
 	}
 }
 
-int cell :: getVerticesID(int n) {
+int cell::getVerticesID(int n) {
         return this->p[n];
 }
 

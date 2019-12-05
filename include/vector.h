@@ -1,11 +1,4 @@
-﻿//
-//  vector.h
-//  vector
-//
-//  Created by Hana Makhlouf on 11/9/18.
-//  Copyright © 2018 Hana Makhlouf. All rights reserved.
-//
-
+﻿
 #ifndef vector_h
 #define vector_h
 
@@ -24,6 +17,8 @@ public:
 
 	Vector();
 	Vector( double x, double y, double z ); //initialise
+    Vector( double x, double y);
+    Vector(const Vector &v2);
     
 	void SetVector(int ID,double x, double y, double z);
 	void print();

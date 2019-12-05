@@ -1,5 +1,5 @@
 
-#include "triangle.h"
+#include "../include/triangle.h"
 
 //calculate the volume of this cell
 //execute one time of vector calculation
@@ -7,16 +7,17 @@
 double Triangle :: getarea() {
 	string RootArea = getParam(10);
 	if (RootArea == "e") return -1;
-	double RArea = stof(RootArea);
+	double RArea = StringToNumber<double>(RootArea);
 	area = RArea*RArea;
 	return area;
 }
 
-
-
 void Triangle::Circumcircle(Vector &A, Vector &B, Vector &C){
+	
 	Matrix RhsM( A.getx(), B.getx(), C.getx(),  A.gety(), B.gety(), C.gety(), 1,1,1);
+
 	RhsM.inverse();
+
 
 	vector<double> LhsM,res;
 	LhsM.push_back((A.getx()*A.getx()) + (A.gety()*A.gety()));
@@ -24,16 +25,15 @@ void Triangle::Circumcircle(Vector &A, Vector &B, Vector &C){
 	LhsM.push_back((C.getx()*C.getx()) + (C.gety()*C.gety()));
 	
 	res = RhsM.Multiply1X3(LhsM);
-	
+
 	double Ox = res[0] * 0.5;
 	double Oy = res[1] * 0.5;
 	
 	circumcentre.SetVector(id,Ox,Oy,A.gety());
-
+	
 	radius = sqrt(res[2] + Ox*Ox + Oy*Oy);
 	//cout << radius << " " << Ox << " " << Oy << endl;
-	
-	delete &RhsM,&LhsM,&res;
+
 }
 
 
@@ -63,10 +63,10 @@ void Triangle::Circumcircle(Vector &A, Vector &B, Vector &C){
 // 	radius = circumcentre.length(B); //Length OB
 
 	
-// 	delete &AB,&BC;
 // }
 
 Vector Triangle::getCircumcentre() const{
+		
 	  return this->circumcentre;
 }
 
@@ -80,6 +80,7 @@ bool Triangle::isPointInCircumcircle(double px, double py){
 }
 
 float Triangle::getRadius() {
+	
 	  return this->radius;
 }
 

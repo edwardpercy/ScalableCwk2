@@ -1,20 +1,8 @@
-/** @file
-* This file handles matrices for model loader 
-*/
-/** Brief description
-* It can currently calculate the determinant of a 3x3 matrix as well as rotate it 90 degrees anti clockwise.
-*/
-//Matrix source file by Hana Makhlouf as part of H62PEP
-//The matrix class is a work in progress. It can currently calculate the determinant
-//of a 3x3 matrix as well as rotate it 90 degrees anti clockwise
-
-//The code to find the inverse is not working right now. The class is not linked to the rest of the classes yet
-
 
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
-#include "matrix.h"
+#include "../include/matrix.h"
 using namespace std;
 
 /*-- -------------------------------------------------------*/
@@ -29,6 +17,49 @@ Matrix::Matrix( double m11, double m12, double m13, double m21, double m22, doub
 	this->m32 = m32;
 	this->m33 = m33;
 }
+
+Matrix::Matrix(const Matrix &m2) {
+		m11 = m2.m11;
+		m12 = m2.m12;
+		m13 = m2.m13;
+		m21 = m2.m21;
+		m22 = m2.m22;
+		m23 = m2.m23;
+		m31 = m2.m31;
+		m32 = m2.m32;
+		m33 = m2.m33;
+
+	} 
+
+
+void Matrix::inverse() {
+	// computes the inverse of a matrix m
+	double det = m11 * (m22 * m33 - m32 * m23) -
+				m12 * (m21 * m33 - m23 * m31) +
+				m13 * (m21 * m32 - m22 * m31);
+
+	double invdet = 1 / det;
+
+	SetMatrix((m22 * m33 - m32 * m23) * invdet,
+	(m13 * m32 - m12 * m33) * invdet,
+	(m12 * m23 - m13 * m22) * invdet,
+	(m23 * m31 - m21 * m33) * invdet,
+	(m11 * m33 - m13 * m31) * invdet,
+	(m21 * m13 - m11 * m23) * invdet,
+	(m21 * m32 - m31 * m22) * invdet,
+	(m31 * m12 - m11 * m32) * invdet,
+	(m11 * m22 - m21 * m12) * invdet);
+} 
+
+vector<double> Matrix::Multiply1X3(vector<double> &Vec) {
+	vector<double> res;
+	res.push_back((Vec[0] * m11) + (Vec[1] * m21) + (Vec[2] * m31));
+	res.push_back((Vec[0] * m12) + (Vec[1] * m22) + (Vec[2] * m32));
+	res.push_back((Vec[0] * m13) + (Vec[1] * m23) + (Vec[2] * m33));
+
+	return res;
+}
+
 
 void Matrix::SetMatrix( double m11, double m12, double m13, double m21, double m22, double m23, double m31, double m32, double m33) {
 	this->m11 = m11;
@@ -67,19 +98,17 @@ void Matrix::identity(Matrix m) { //diagonals are 1
 	this->m33 = 1;
 }
 
-vector<double> Matrix::getMatrix() { //diagonals are 1
-	vector<double> res;
-	res.push_back(m11);
-	res.push_back(m21);
-	res.push_back(m31);
-	res.push_back(m12);
-	res.push_back(m22);
-	res.push_back(m32);
-	res.push_back(m13);
-	res.push_back(m23);
-	res.push_back(m33);
-
-	return res;
+double Matrix::getMatrix(int m) { //diagonals are 1
+	if (m==11) return m11;
+	else if (m==21) return m21;
+	else if (m==31) return m31;
+	else if (m==21) return m21;
+	else if (m==22) return m22;
+	else if (m==23) return m23;
+	else if (m==31) return m31;
+	else if (m==32) return m32;
+	else if (m==33) return m33;
+	else return 0;
 }
 	/*---------------------------------------------------------*/
 	//rotation 
@@ -120,33 +149,6 @@ vector<double> Matrix::getMatrix() { //diagonals are 1
 	}
 
 
-	/*---------------------------------------------------------*/
-//calculating the inverse - currently outputting incorrect values
+
 	
-	void Matrix::inverse() {
-		// computes the inverse of a matrix m
-		double det = m11 * (m22 * m33 - m32 * m23) -
-					m12 * (m21 * m33 - m23 * m31) +
-					m13 * (m21 * m32 - m22 * m31);
 
-		double invdet = 1 / det;
-
-		SetMatrix((m22 * m33 - m32 * m23) * invdet,
-		(m13 * m32 - m12 * m33) * invdet,
-		(m12 * m23 - m13 * m22) * invdet,
-		(m23 * m31 - m21 * m33) * invdet,
-		(m11 * m33 - m13 * m31) * invdet,
-		(m21 * m13 - m11 * m23) * invdet,
-		(m21 * m32 - m31 * m22) * invdet,
-		(m31 * m12 - m11 * m32) * invdet,
-		(m11 * m22 - m21 * m12) * invdet);
-	} 
-
-	vector<double> Matrix::Multiply1X3(vector<double> &Vec) {
-		vector<double> res;
-		res.push_back((Vec[0] * m11) + (Vec[1] * m21) + (Vec[2] * m31));
-		res.push_back((Vec[0] * m12) + (Vec[1] * m22) + (Vec[2] * m32));
-		res.push_back((Vec[0] * m13) + (Vec[1] * m23) + (Vec[2] * m33));
-
-		return res;
-	}

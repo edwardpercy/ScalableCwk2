@@ -1,9 +1,13 @@
 
-#include "mesh.h"
+#include "../include/mesh.h"
 #include <vector>
 #include <cstring>
+
 Mesh::Mesh() { //Model class constructor
-	//LoadModel(FileName);
+	//LoadMesh(FileName);
+}
+Mesh::Mesh(string FileName) { //Model class constructor
+	LoadMesh(FileName);
 }
 Mesh::~Mesh() {
 	//Clears all the vector lists from memory
@@ -11,8 +15,23 @@ Mesh::~Mesh() {
 	Triangles.clear();
 }
 
+Mesh::Mesh(const Mesh &m2) {
+		Vertices = m2.Vertices;
+		Cells = m2.Cells;
+		Triangles = m2.Triangles;
+		x = m2.x;
+		y = m2.y;
+		z = m2.z;
+		V = m2.V;
+	} 
+
 void Mesh::SaveMesh(string FileName) { //Loads the model
-	std::ofstream file(FileName);
+	std::ofstream file(FileName.c_str());
+
+	if (!file){
+		throw("ERROR: Error saving to file");
+	}
+
 	file << Vertices.size() << " " << 3 << " " << 0;
 	for (int i = 0;i < Vertices.size();i++){
 		file << "\n" << i << " " << Vertices[i].getx() << " " << Vertices[i].gety() << " " << Vertices[i].getz();
@@ -32,40 +51,50 @@ void Mesh::SaveMesh(string FileName) { //Loads the model
 
 
 void Mesh::LoadMesh(string FileName) { //Loads the model
-	bool LineInit = true;
-	int id ,V1 ,V2 ,V3 ,LinesToInterate, NumCols, NumProperties = 0;
-	double X,Y,Z;
-	string parameters;
+	int temp,id ,LinesToInterate, NumCols, NumProperties = 0;
+	int iterator = 0;
+    double X,Y,Z;
+	vector<int> C_Vertices;
+	string attributes;
 
-	ifstream file(FileName, ios::in);
+	ifstream file(FileName.c_str(), ios::in);
 
 	if (!file){
-		cerr<<"File could not be opened"<<endl;
-		exit(EXIT_FAILURE);
+		throw("ERROR: File could not be opened");
 	}
+	
 
 	while(file>>LinesToInterate>>NumCols>>NumProperties) { 
-		if (NumProperties==0){
+	
+		if (iterator==0){
 			for (int i(0);i<LinesToInterate;i++){
-				(file>>id>>X>>Y>>Z);
-				Vector *V = new Vector; //Creates a new vector object
-				V->SetVector(id,X,Y,Z); //Sends the data to the class function
-				Vertices.push_back(*V); //Adds it to the vector list 
+				if (NumCols == 2) (file>>id>>X>>Y) && getline(file, attributes);
+				else if (NumCols == 3) (file>>id>>X>>Y>>Z) && getline(file, attributes);
+				else throw "ERROR: Invalid dimensions entered";
+				SetVertices(id,X,Y,Z,NumCols ,attributes);
+				
 			}
 		}
 		else{
 			for (int i(0);i<LinesToInterate;i++){
-				(file>>id>>V1>>V2>>V3) && getline(file, parameters);	
-				Triangle *T = new Triangle;
+				file>>id;
+				for (int v_per_cell(0);v_per_cell < NumCols ;v_per_cell++){
+					file>>temp;
+					C_Vertices.push_back(temp);
+				}
+				getline(file, attributes);	
+			
+				if (NumCols == 3) SetTriangle(id,C_Vertices[0],C_Vertices[1],C_Vertices[2],attributes); //3 vertices is triangle 
+				else throw("ERROR: 3 vertices shapes only supported currently");
+				C_Vertices.clear();
 				
-				T->setCell(id, parameters);
-				T->setVertices(V1);
-				T->setVertices(V2);
-				T->setVertices(V3);
+			  //else if WRITE OTHER SHAPES HERE 
+			  //else if (NumCols == 4) SetTetrahedron; (EXAMPLE)
+			  //else if (NumCols == 8) SetHexahedron; (EXAMPLE for future code)
 				
-				Triangles.push_back(*T);
 			}
 		}
+		iterator +=1;
 	}
 	cout << "Number of triangles loaded: " << Triangles.size() << endl;
 	cout << "Number of vertices loaded: " << Vertices.size() <<"\n" << endl;
@@ -102,7 +131,7 @@ int Mesh::CircumcirclesCheck(Vector point){
 		if (inCircumcircle == true && !Vertices[p[0]].equal(point) && !Vertices[p[1]].equal(point)  && !Vertices[p[2]].equal(point)){
 			
 			
-			cout << "Point: " << point.getx() << "," << point.gety() << " within the circumcircle of triangle with ID: " << i << endl;
+			cout << "Point(" << point.getx() << "," << point.gety() << ") in circumcircle triangleID(" << i << ")    ";
 			NumCircumcirclesContained += 1;
 		}
 	}
@@ -113,14 +142,50 @@ bool Mesh::DelaunayCheck(){
 	bool isDelaunay = true;
 	for (int i(0); i < Vertices.size(); i++){
 		if (CircumcirclesCheck(Vertices[i]) > 0){
-			cout << "Point ID "<< i << endl;
+			cout << "PointID: "<< i << endl;
 			isDelaunay = false;
-		} 
+		}
 	}
+	cout << "\n";
 	if(isDelaunay == true) return true;
 	else return false;
 	
 
+}
+void Mesh::SetVertices(int id,double X,double Y,double Z,int dimensions, string attributes){
+	if (dimensions == 3){
+		Vector *V = new Vector; //Creates a new vector object
+		V->SetVector(id,X,Y,Z); //Sends the data to the class function
+		Vertices.push_back(*V); //Adds it to the vector list 
+	}
+	else if (dimensions == 2){
+		Vector *V = new Vector(id,X,Y); //Creates a new vector object
+		Vertices.push_back(*V); //Adds it to the vector list 
+	}
+	
+}
+
+void Mesh::SetTriangle(int id,double V1,double V2,double V3,string attributes){
+	Triangle *T = new Triangle;
+					
+	T->setCell(id, attributes);
+	T->setVertices(V1);
+	T->setVertices(V2);
+	T->setVertices(V3);
+
+	Triangles.push_back(*T);
+}
+
+vector<Vector> Mesh::GetVertices(){
+	return Vertices;
+}
+
+vector<cell> Mesh::GetCells(){
+	return Cells;
+}
+
+vector<Triangle> Mesh::GetTriangles(){
+	return Triangles;
 }
 
 void Mesh::CalcCircumcircle(int id){
@@ -157,9 +222,15 @@ double Mesh::TriangleArea(int id){
 int Mesh::NumberVertices(void) {
 	return Vertices.size();
 }
+int Mesh::NumberTriangles(void) {
+
+	return Triangles.size();
+	
+}
+
 int Mesh::NumberCells(void) {
 
-	int output = Triangles.size();
-	return output;
+	return Cells.size();
+	
 }
 

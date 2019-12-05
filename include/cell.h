@@ -19,8 +19,10 @@ protected:
       string type;
       vector<int> p;                            //vector storing verticesID
 	  vector<string> params;                            //vector storing verticesID
-	  double volume;
 public:	 
+	  cell();
+	  cell(const cell &c2);
+	  void setCell(int ID);
       void setCell(int ID, string parameters); //store cellID, matID and cell type
       void setVertices(int v);                  //store verticesID
       vector<int> getVertices();
