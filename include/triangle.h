@@ -29,6 +29,7 @@ public:
 	Vector getCircumcentre() const;
 	float getRadius();
 	double getarea();
+   void Circumcircle_OLDCHECK(Vector &A, Vector &B, Vector &C);
 	bool isPointInside(Vector &p0, Vector &p1, Vector &p2, double px, double py);
 	void Circumcircle(Vector &A, Vector &B, Vector &C);
 	bool isPointInCircumcircle(double px, double py);

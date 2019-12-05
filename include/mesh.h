@@ -22,6 +22,7 @@ private:
 	vector<Triangle> Triangles;
 	float x, y, z;
     vector<float> V;
+	int dimensions,NoArguments;
 
 
 public:

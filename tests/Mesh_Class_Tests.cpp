@@ -44,6 +44,13 @@ TEST_CASE( ".node File Saved", "[SaveNodes]" ) {
     REQUIRE( MCopy.NumberVertices() == 22);
 }
 
+
+TEST_CASE( "PointinTriangleCheck", "[PointCheck]" ) {
+    Mesh M = Mesh("../resources/triangulation_files/triangulation#1.tri");
+    REQUIRE(M.isPointContained(70,-2) == 2229);
+
+}
+
 TEST_CASE( "CircumcirclesCheck", "[CircumcirclesCheck]" ) {
     Mesh M = Mesh("../resources/triangulation_files/triangulation#2.tri");
     Vector p = Vector(65.674, 1.48582, 994);
@@ -96,7 +103,6 @@ TEST_CASE( "Integrate Function over mesh (Constant)", "[ConstantIntegration]" ) 
         M.CalcCircumcircle(i);
 
     }
-
     double I = M.integrate(function, 0);
     cout << "Constant Approx: " << I << endl;
     REQUIRE(I == Approx(2920231.515));

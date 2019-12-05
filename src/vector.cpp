@@ -1,4 +1,17 @@
-﻿
+﻿/* triangle.cpp
+Main shape TRIANGLE class to do functions related to circumcircle and point checks specific to the triangle 
+not other cells
+
+Available functions:
+Circumcircle (using MATRIX or other METHOD)
+get radius
+ispointintriangle check
+
+Constructors/Copy constructors in PARENT class cell
+Created by Edward Percy 12/2019.
+*/
+
+
 #include <iostream>
 #include "../include/vector.h"
 #include <vector> 
