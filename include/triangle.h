@@ -1,3 +1,7 @@
+/* triangle.h
+triangle header, main shape in the mesh with point inside and circumcircle tests
+Created by Edward Percy 12/2019.
+*/
 #pragma once
 #include <iostream>
 #include "cell.h"

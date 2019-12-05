@@ -1,13 +1,13 @@
-﻿/* triangle.cpp
-Main shape TRIANGLE class to do functions related to circumcircle and point checks specific to the triangle 
-not other cells
+﻿/* vector.cpp
+Main shape VECTOR class to store XYZ and apply different functions outlined below
 
 Available functions:
-Circumcircle (using MATRIX or other METHOD)
-get radius
-ispointintriangle check
+Set/Get
+add,equality check
+midpoint, length, slope
+divide, subtract
 
-Constructors/Copy constructors in PARENT class cell
+Constructors/Copy constructors 
 Created by Edward Percy 12/2019.
 */
 
@@ -18,19 +18,19 @@ Created by Edward Percy 12/2019.
 using namespace std;
 
 /*-- -------------------------------------------------------*/
-Vector::Vector( double x, double y, double z ) { //constructor
+Vector::Vector( double x, double y, double z ) { //constructor with XYZ - dimension 3
     this->x = x;
     this->y = y;
     this->z = z;
 }
 
-Vector::Vector( double x, double y) { //constructor
+Vector::Vector( double x, double y) { //constructor with XY dimension 2
     this->x = x;
     this->y = y;
     this->y = 0;
 }
 
-void Vector::SetVector(int ID, double x, double y, double z) { //setting vector values using this
+void Vector::SetVector(int ID, double x, double y, double z) { //setting vector values
 	this->ID = ID;
 	this->x = x;
 	this->y = y;
@@ -43,7 +43,7 @@ Vector::Vector() { //default constructor just in case no values are entered
     this->z = 0.;
 }
 
-Vector::Vector(const Vector &v2) {
+Vector::Vector(const Vector &v2) { //Copy-constructor
 		ID = v2.ID;
         x = v2.x;
         y = v2.y;
@@ -51,37 +51,31 @@ Vector::Vector(const Vector &v2) {
 
 	} 
 
-/*---------------------------------------------------------*/
 //add function
 void Vector::add( Vector v ) {
     this->x += v.x;
     this->y += v.y;
     this->z += v.z;
 }
-bool Vector::equal( Vector v ) {
+bool Vector::equal( Vector v ) { //Equality check between vectors
 	if (this->x == v.x && this->y ==v.y && this->z == v.z) return true;
 	else return false;
 #
 }
 
-void Vector::midpoint( Vector a, Vector b) {
+void Vector::midpoint( Vector a, Vector b) { //midpoint calculatiuon for circumcentre calc
 
     this->x = (a.x + b.x) / 2;
 	this->y = (a.y + b.y) / 2;
 
 }
 
-double Vector::length(Vector B) {
-
+double Vector::length(Vector B) { //Length between vectors checks
     return sqrt(((this->x - B.x) * (this->x - B.x))+((this->y - B.y) * (this->y - B.y)));
-	
-
 }
 
-double Vector::slope( Vector from, Vector to) {
-
+double Vector::slope( Vector from, Vector to) { //Slope calculation between vectors
     return (to.y - from.y) / (to.x - from.x);
-
 }
 
 Vector Vector::divide(int n) { //divide function

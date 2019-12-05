@@ -1,4 +1,9 @@
 ﻿
+/* vector.h
+vector header for storing XYZ and XY vectors from node and .tri files
+Created by Edward Percy 12/2019.
+*/
+
 #ifndef vector_h
 #define vector_h
 

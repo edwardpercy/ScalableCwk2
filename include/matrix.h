@@ -2,6 +2,11 @@
 #pragma once
 
 #include <vector> 
+/* matrix.h
+matrix header for matrix sums used in circumcircle calculations 
+Created by Edward Percy 12/2019.
+*/
+
 using namespace std;
 
 class Matrix {

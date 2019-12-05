@@ -1,3 +1,8 @@
+/* cell.h
+cell header parent of triangle class pluss other shapes in future
+Created by Edward Percy 12/2019.
+*/
+
 #pragma once
 
 #include <iostream>
